@@ -11,12 +11,9 @@ import UIKit
 class ViewController: UIViewController {
     
     var allQuestions = QuestionBank()
-    var currentQuestionNumber = 0 {
-        didSet {
-            questionLabel.text = allQuestions.list[currentQuestionNumber].text
-        }
-    }
+    var currentQuestionNumber = 0
     var currentAnswer: Bool?
+    var score = 0
     
     @IBOutlet weak var questionLabel: UILabel!
     @IBOutlet weak var scoreLabel: UILabel!
@@ -27,6 +24,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         currentQuestionNumber = 0
+        updateUI()
     }
 
     @IBAction func answerPressed(_ sender: AnyObject) {
@@ -38,7 +36,10 @@ class ViewController: UIViewController {
     }
     
     func updateUI() {
-        
+        questionLabel.text = allQuestions.list[currentQuestionNumber].text
+        scoreLabel.text = "Score: \(score)"
+        progressLabel.text = "\(currentQuestionNumber + 1) / \(allQuestions.list.count)"
+        progressBar.frame.size.width = view.frame.size.width / CGFloat(allQuestions.list.count) * CGFloat(currentQuestionNumber + 1)
     }
 
     func nextQuestion() {
@@ -54,12 +55,15 @@ class ViewController: UIViewController {
             
             present(alert, animated: true)
         }
+        
+        updateUI()
     }
     
     func checkAnswer() {
         if let currentAnswer = currentAnswer,
             allQuestions.list[currentQuestionNumber].correctAnswer == currentAnswer {
             print("You are right!")
+            score += 1
         } else {
             print("Wrong!")
         }
@@ -67,6 +71,8 @@ class ViewController: UIViewController {
     
     func startOver() {
         currentQuestionNumber = 0
+        score = 0
+        updateUI()
     }
 
 }

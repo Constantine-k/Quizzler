@@ -11,11 +11,9 @@ import UIKit
 class ViewController: UIViewController {
     
     var allQuestions = QuestionBank()
-    var currentQuestionNumber: Int? {
+    var currentQuestionNumber = 0 {
         didSet {
-            if let currentQuestionNumber = currentQuestionNumber {
-                questionLabel.text = allQuestions.list[currentQuestionNumber].text
-            }
+            questionLabel.text = allQuestions.list[currentQuestionNumber].text
         }
     }
     var currentAnswer: Bool?
@@ -31,7 +29,6 @@ class ViewController: UIViewController {
         currentQuestionNumber = 0
     }
 
-
     @IBAction func answerPressed(_ sender: AnyObject) {
         if let tag = sender.tag {
             currentAnswer = (tag == 1) ? true : false
@@ -40,16 +37,13 @@ class ViewController: UIViewController {
         nextQuestion()
     }
     
-    
     func updateUI() {
         
     }
-    
 
     func nextQuestion() {
-        if let currentQuestionNumberUnwrapped = currentQuestionNumber,
-            currentQuestionNumberUnwrapped + 1 < allQuestions.list.count {
-            currentQuestionNumber = currentQuestionNumberUnwrapped + 1
+        if currentQuestionNumber + 1 < allQuestions.list.count {
+            currentQuestionNumber = currentQuestionNumber + 1
         } else {
             let alert = UIAlertController(title: "Awesome", message: "You've finished all the questions, do you want to start over?", preferredStyle: .alert)
             let restartAction = UIAlertAction(title: "Restart", style: .default, handler: { [weak self] (UIAlertAction) in
@@ -62,10 +56,8 @@ class ViewController: UIViewController {
         }
     }
     
-    
     func checkAnswer() {
         if let currentAnswer = currentAnswer,
-            let currentQuestionNumber = currentQuestionNumber,
             allQuestions.list[currentQuestionNumber].correctAnswer == currentAnswer {
             print("You are right!")
         } else {
@@ -73,9 +65,8 @@ class ViewController: UIViewController {
         }
     }
     
-    
     func startOver() {
         currentQuestionNumber = 0
     }
-    
+
 }
